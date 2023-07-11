@@ -9,7 +9,10 @@ library(DT)
 
 
 ui <- dashboardPage(
+  # Declare header
   dashboardHeader(title = "Slurm Data"),
+
+  # Define sidebar
   dashboardSidebar(
     sidebarMenu(
         sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
@@ -22,11 +25,12 @@ ui <- dashboardPage(
                  href = "https://github.com/rstudio/shinydashboard/")
     )
   ),
+  # Define body content
   dashboardBody(
     tags$head(
             tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
     ),
-    # Also add some custom CSS to make the title background area the same
+    # Added some custom CSS to make the title background area the same
     # color as the rest of the header.
     tags$head(tags$style(HTML('
         .skin-blue .main-header .logo {
