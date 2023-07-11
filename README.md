@@ -27,8 +27,9 @@ Use port forwarding to access the app instead.
 1. `kubeclt delete pod <pod_name>`
 
 ## Clean up
-Once you are done, clean up the resources created in your cluster.
-
-1. `kubectl delete deployment shiny-app`
-2. `kubectl delete service shiny-app`
-3. `minikube stop`
+When finished, clean up the resources created in your cluster and stop Minikube.
+```
+kubectl delete deployment shiny-app
+kubectl delete service shiny-app
+minikube stop
+```
