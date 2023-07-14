@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shiny-app-ingress
+spec:
+  rules:
+    - host: k8sdashboard.example.com
+      http:
+        paths:
+          - path: /shiny-app
+            pathType: Prefix
+            backend:
+              service:
+                name: shiny-app-service
+                port:
+                  number: 80
