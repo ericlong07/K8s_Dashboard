@@ -26,6 +26,12 @@ See Kubernetes' [Install tools](https://kubernetes.io/docs/tasks/tools/#kubectl)
 - Pods: `kubectl get pods`
 - Ingresses: `kubectl get ingresses`
 
+To list all the nodes and pods in your cluster:
+```
+kubectl get nodes
+kubectl get pods --all-namespaces
+```
+
 ## Scaling the app
 1. `kubectl scale deployments/shiny-app --replicas=<desired_amount>`
 
@@ -47,4 +53,4 @@ kubectl delete namespace ingress-nginx
 kubectl delete ingress shiny-app-ingress
 ```
 
-Finally, `minikube stop`.
+Finally, `minikube stop`
