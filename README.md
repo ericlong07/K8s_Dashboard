@@ -30,6 +30,6 @@ Use port forwarding to access the app instead.
 When finished, clean up the resources created in your cluster and stop Minikube.
 ```
 kubectl delete deployment shiny-app
-kubectl delete service shiny-app
+kubectl delete service shiny-app-service
 minikube stop
 ```
