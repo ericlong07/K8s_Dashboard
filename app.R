@@ -22,7 +22,7 @@ ui <- dashboardPage(
         menuItem("Data Table", tabName = "dataTable", 
                  icon = icon("th", lib = "glyphicon")),
         menuItem("Source code", icon = icon("file", lib = "glyphicon"),
-                 href = "https://github.com/rstudio/shinydashboard/")
+                 href = "https://github.com/ericlong07/K8s_Dashboard.git")
     )
   ),
   # Define body content

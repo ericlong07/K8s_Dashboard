@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: shiny-app
-          image: docker.io/ericlong07/shiny-app:first
+          image: docker.io/ericlong07/shiny-app:v1.1
           ports:
             - containerPort: 3838
           resources:
