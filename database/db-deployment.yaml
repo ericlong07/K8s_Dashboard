@@ -34,4 +34,17 @@ spec:
               memory: "512Mi"  # Set the desired memory request here
       volumes:
         - name: my-postgres-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Set the desired storage size here
+  storageClassName: standard  # Change to your preferred storage class name, if applicable
