@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres-container
+          image: docker.io/ericlong07/shiny-app:database
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: password
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          resources:  # Add resource limits here
+            limits:
+              cpu: "1"  # Limit the container to 1 CPU core
+              memory: "1Gi"  # Limit the container to 1GB of memory
+            requests:
+              cpu: "0.5"  # Request 0.5 CPU core at minimum
+              memory: "512Mi"  # Request 512MB of memory at minimum
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
