@@ -13,27 +13,25 @@ spec:
         app: postgres
     spec:
       containers:
-        - name: postgres-container
+        - name: postgres
           image: docker.io/ericlong07/shiny-app:database
+          env:
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: "trust"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pg_data
           ports:
             - containerPort: 5432
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-password
-                  key: password
           volumeMounts:
-            - name: postgres-data
-              mountPath: /var/lib/postgresql/data
-          resources:  # Add resource limits here
+            - name: my-postgres-data
+              mountPath: /var/lib/postgresql/data/slurm_data
+          resources:
             limits:
-              cpu: "1"  # Limit the container to 1 CPU core
-              memory: "1Gi"  # Limit the container to 1GB of memory
+              cpu: "1"
+              memory: "1Gi"  # Set the desired memory limit here
             requests:
-              cpu: "0.5"  # Request 0.5 CPU core at minimum
-              memory: "512Mi"  # Request 512MB of memory at minimum
+              cpu: "0.5"
+              memory: "512Mi"  # Set the desired memory request here
       volumes:
-        - name: postgres-data
-          persistentVolumeClaim:
-            claimName: postgres-pvc
+        - name: my-postgres-data
+          emptyDir: {}
