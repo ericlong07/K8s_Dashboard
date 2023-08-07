@@ -22,18 +22,19 @@ spec:
               value: /var/lib/postgresql/data/pg_data
           ports:
             - containerPort: 5432
+          imagePullPolicy: Always
           volumeMounts:
-            - name: my-postgres-data
-              mountPath: /var/lib/postgresql/data/slurm_data
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
           resources:
             limits:
               cpu: "1"
-              memory: "1Gi"  # Set the desired memory limit here
+              memory: "1Gi"
             requests:
               cpu: "0.5"
-              memory: "512Mi"  # Set the desired memory request here
+              memory: "512Mi"
       volumes:
-        - name: my-postgres-data
+        - name: postgres-data
           persistentVolumeClaim:
             claimName: postgres-pvc
 ---
@@ -46,5 +47,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi  # Set the desired storage size here
-  storageClassName: standard  # Change to your preferred storage class name, if applicable
+      storage: 1Gi
+  storageClassName: standard

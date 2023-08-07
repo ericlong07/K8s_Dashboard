@@ -1,14 +1,15 @@
+# For local testing purposes
 version: '3.8'
 services:
   postgres:
-    image: my-postgres-container
+    image: postgres-container
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
       PGDATA: /var/lib/postgresql/data/pg_data
     ports:
       - "5432:5432"
     volumes:
-      - my-postgres-data:/var/lib/postgresql/data/slurm_data  # Mount the volume to /var/lib/postgresql/data/slurm_data
+      - postgres-data:/var/lib/postgresql/data  # Mount the volume to /var/lib/postgresql/data
 
 volumes:
-  my-postgres-data:
+  postgres-data:

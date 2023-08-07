@@ -39,4 +39,4 @@ EOF
 psql -U postgres -d postgres -c "TRUNCATE TABLE slurm_data;"
 
 # Import data from CSV
-psql -U postgres -d postgres -c "\COPY slurm_data FROM '/var/lib/postgresql/data/slurm_data/Jul2018.csv' DELIMITER ',' CSV HEADER;"
+psql -U postgres -d postgres -c "\COPY slurm_data FROM '/slurm_data/Jul2018.csv' DELIMITER ',' CSV HEADER;"
