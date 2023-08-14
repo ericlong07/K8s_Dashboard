@@ -4,10 +4,14 @@ FROM r-base:latest
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libssl-dev \
-    libcurl4-openssl-dev
+    libcurl4-openssl-dev \
+    unixodbc-dev \
+    libpq-dev
 
 # Install R packages required for the Shiny application
-RUN R -e "install.packages(c('shiny', 'shinydashboard', 'readr', 'plotly', 'ggplot2', 'DT'), repos='https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('shiny', 'shinydashboard', 'readr', 'plotly', 'ggplot2', 'DT', 'DBI'), repos = 'https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('RODBC', 'odbc'), repos = 'https://cran.rstudio.com/')"
+RUN R -e "install.packages('RPostgres', repos = 'https://cran.rstudio.com/')"
 
 # Copy the Shiny application files to the Docker container
 COPY app.R /app/

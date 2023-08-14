@@ -1,11 +1,22 @@
 ## app.R ##
-
 library(shiny)
 library(shinydashboard)
 library(readr)
 library(plotly)
 library(ggplot2)
 library(DT)
+library(DBI)
+library(RODBC)
+library(odbc)
+library(RPostgres)
+
+
+# Specify database information
+dsn_database = "postgres"
+dsn_hostname = "postgres-service"  
+dsn_port = "5432"
+dsn_uid = "postgres"
+dsn_pwd = "mysecretpassword"
 
 
 ui <- dashboardPage(
@@ -30,8 +41,7 @@ ui <- dashboardPage(
     tags$head(
             tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
     ),
-    # Added some custom CSS to make the title background area the same
-    # color as the rest of the header.
+    # Added some custom CSS to make the title background area the same color as the rest of the header.
     tags$head(tags$style(HTML('
         .skin-blue .main-header .logo {
           background-color: #3c8dbc;
@@ -136,6 +146,18 @@ ui <- dashboardPage(
 
 # Define the server logic
 server <- function(input, output, session) {
+
+  # Establish R and PostgreSQL connection through RPostgreSQL
+  # drv <- dbDriver('PostgreSQL')
+  print("Connecting to Database…")
+  connec <- dbConnect(RPostgres::Postgres(), 
+              dbname = dsn_database,
+              host = dsn_hostname, 
+              port = dsn_port,
+              user = dsn_uid, 
+              password = dsn_pwd)
+  print("Database Connected!")
+
   input_file <- reactive({
     if (is.null(input$file)) {
       return("")
@@ -252,6 +274,14 @@ server <- function(input, output, session) {
     data <- data[with(data, order(data$Start, data$End)), ]
 
     data
+  })
+
+  # Add a function to close the connection when the app exits
+  onSessionEnded(function() {
+    if (!is.null(connec)) {
+      print("Closing database connection...")
+      dbDisconnect(connec)
+    }
   })
 }
 
