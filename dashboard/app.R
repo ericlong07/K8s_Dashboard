@@ -1,4 +1,3 @@
-## app.R ##
 library(shiny)
 library(shinydashboard)
 library(readr)
@@ -53,12 +52,6 @@ ui <- dashboardPage(
       
     tabItems(
         tabItem(tabName = "dashboard",
-            fluidRow(
-              box(status = "info", width = 3,
-                  fileInput("file", "SELECT A FILE:")
-              )
-            ),
-            
             # Plot 1
             fluidRow(
               box(status = "danger", title = "Allocated CPUS",
@@ -67,7 +60,7 @@ ui <- dashboardPage(
               ),
               
               box(status = "danger", title = "From:",
-                  selectInput("dateRange", "Select Date Range",
+                  selectInput("dateRange1", "Select Date Range",
                               choices = NULL,
                               selected = NULL
                   ),
@@ -147,8 +140,7 @@ ui <- dashboardPage(
 # Define the server logic
 server <- function(input, output, session) {
 
-  # Establish R and PostgreSQL connection through RPostgreSQL
-  # drv <- dbDriver('PostgreSQL')
+  # Establish R and PostgreSQL connection through RPostgres
   print("Connecting to Database…")
   connec <- dbConnect(RPostgres::Postgres(), 
               dbname = dsn_database,
@@ -158,122 +150,81 @@ server <- function(input, output, session) {
               password = dsn_pwd)
   print("Database Connected!")
 
-  input_file <- reactive({
-    if (is.null(input$file)) {
-      return("")
-    }
-    
-    # actually read the file
-    read_csv(file = input$file$datapath)
-  })
+   # Fetch data from the database
+  query <- glue::glue("SELECT * FROM slurm_data")
+  data <- dbGetQuery(connec, query)
+
+  # Get the date range
+  data$Start <- as.Date(substr(data$Start, start = 1, stop = 10))
+  data$End <- as.Date(substr(data$End, start = 1, stop = 10))
+  dateChoices <- unique(data$Start)
+  dateChoices <- sort(dateChoices)
   
-  observe({
-    req(input_file())
+  # Update 'From' dates for graph 1
+  updateSelectInput(session, "dateRange1",
+                    choices = dateChoices,
+                    selected = dateChoices[1]
+  )
+
+  # Update 'To' dates
+  updateSelectInput(session, "dateRange2",
+                    choices = dateChoices,
+                    selected = dateChoices[length(dateChoices)]
+  )
+
+  # Update for graph 2
+  updateSelectInput(session, "dateRange3",
+                    choices = dateChoices,
+                    selected = dateChoices[1]
+  )
+
+  updateSelectInput(session, "dateRange4",
+                    choices = dateChoices,
+                    selected = dateChoices[length(dateChoices)]
+  )
+
+  # Update for graph 3
+  updateSelectInput(session, "dateRange5",
+                    choices = dateChoices,
+                    selected = dateChoices[1]
+  )
+
+  updateSelectInput(session, "dateRange6",
+                    choices = dateChoices,
+                    selected = dateChoices[length(dateChoices)]
+  )
+
+  # Create a function to generate plotly plots
+  create_plot <- function(data, start_date_input, end_date_input, y_var) {
+    subdata <- subset(
+      data, 
+      Start >= input[[start_date_input]] & Start <= input[[end_date_input]],
+      select=c('Start', y_var))
     
-    data <- input_file()
-    data$Start <- as.Date(substr(data$Start, start = 1, stop = 10))
-    dateChoices <- unique(data$Start)
-    dateChoices <- sort(dateChoices)
-    
-    # Update 'From' dates for graph 1
-    updateSelectInput(session, "dateRange",
-                      choices = dateChoices,
-                      selected = dateChoices[1]
-    )
-    # Update 'To' dates
-    updateSelectInput(session, "dateRange2",
-                      choices = dateChoices,
-                      selected = dateChoices[length(dateChoices)]
-    )
-    
-    # Update for graph 2
-    updateSelectInput(session, "dateRange3",
-                      choices = dateChoices,
-                      selected = dateChoices[1]
-    )
-    
-    updateSelectInput(session, "dateRange4",
-                      choices = dateChoices,
-                      selected = dateChoices[length(dateChoices)]
-    )
-    
-    # Update for graph 3
-    updateSelectInput(session, "dateRange5",
-                      choices = dateChoices,
-                      selected = dateChoices[1]
-    )
-    
-    updateSelectInput(session, "dateRange6",
-                      choices = dateChoices,
-                      selected = dateChoices[length(dateChoices)]
-    )
-  })
-  
+    plot_ly(subdata, x = ~Start, y = as.formula(paste0("~", y_var)), type = "bar")
+  }
+
   # Display plot1
   output$plot1 <- renderPlotly({
-    # render only if there is data available
-    req(input_file())
-
-    # reactives are only callable inside an reactive context like render
-    data <- input_file()
-    data$Start <- as.Date(substr(data$Start, start = 1, stop = 10))
-    data <- subset(
-      data, 
-      Start >= input$dateRange & Start <= input$dateRange2,
-      select=c('Start', 'AllocCPUS'))
-    
-    plot_ly(data, x = ~Start, y = ~AllocCPUS, type = "bar")
+    create_plot(data, "dateRange1", "dateRange2", "alloccpus")
   })
   
   # Plot 2
   output$plot2 <- renderPlotly({
-    # render only if there is data available
-    req(input_file())
-    
-    # reactives are only callable inside an reactive context like render
-    data <- input_file()
-    data$Start <- as.Date(substr(data$Start, start = 1, stop = 10))
-    data <- subset(
-      data, 
-      Start >= input$dateRange3 & Start <= input$dateRange4,
-      select=c('Start', 'AllocNodes'))
-    
-    plot_ly(data, x = ~Start, y = ~AllocNodes, type = "bar")
+    create_plot(data, "dateRange3", "dateRange4", "allocnodes")
   })
   
   # Plot 3
   output$plot3 <- renderPlotly({
-    # render only if there is data available
-    req(input_file())
-    
-    # reactives are only callable inside an reactive context like render
-    data <- input_file()
-    data$Start <- as.Date(substr(data$Start, start = 1, stop = 10))
-    data <- subset(
-      data, 
-      Start >= input$dateRange5 & Start <= input$dateRange6,
-      select=c('Start', 'ElapsedRaw'))
-    
-    plot_ly(data, x = ~Start, y = ~ElapsedRaw, type = "bar")
+    create_plot(data, "dateRange5", "dateRange6", "elapsedraw")
   })
   
   # Render data table
   output$table <- DT::renderDataTable({
-
-    # render only if there is data available
-    req(input_file())
-
-    # reactives are only callable inside an reactive context like render
-    data <- input_file()
-    data <- subset(data,
-                   select=c('JobID','Start', 'End', 'AllocCPUS', 'AllocNodes')
+    subdata <- subset(data,
+                   select=c('jobid','Start', 'End', 'alloccpus', 'allocnodes')
                   )
-    data$Start <- as.Date(substr(data$Start, start = 1, stop = 10))
-    data$End <- as.Date(substr(data$End, start = 1, stop = 10))
-    
-    data <- data[with(data, order(data$Start, data$End)), ]
-
-    data
+    subdata
   })
 
   # Add a function to close the connection when the app exits
