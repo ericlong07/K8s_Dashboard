@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: shiny-app
-          image: docker.io/ericlong07/shiny-app:v1.3
+          image: docker.io/ericlong07/shiny-app:v1.4
           ports:
             - containerPort: 3838
           imagePullPolicy: Always

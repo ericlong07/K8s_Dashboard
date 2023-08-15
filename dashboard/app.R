@@ -35,21 +35,23 @@ ui <- dashboardPage(
                  href = "https://github.com/ericlong07/K8s_Dashboard.git")
     )
   ),
+
   # Define body content
   dashboardBody(
+
+    # Added some custom CSS to change the font and background color of title area.
     tags$head(
-            tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
-    ),
-    # Added some custom CSS to make the title background area the same color as the rest of the header.
-    tags$head(tags$style(HTML('
-        .skin-blue .main-header .logo {
-          background-color: #3c8dbc;
-        }
-        .skin-blue .main-header .logo:hover {
-          background-color: #3c8dbc;
-        }
-      '))),
-      
+        tags$link(rel = "icon", type = "image/x-icon", href = "favicon.ico"),
+        tags$link(rel = "stylesheet", type = "text/css", href = "custom.css"),
+        tags$style(HTML('
+          .skin-blue .main-header .logo {
+            background-color: #3c8dbc;
+          }
+          .skin-blue .main-header .logo:hover {
+            background-color: #3c8dbc;
+          }
+        '))),
+
     tabItems(
         tabItem(tabName = "dashboard",
             # Plot 1
