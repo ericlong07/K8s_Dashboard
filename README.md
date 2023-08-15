@@ -51,6 +51,25 @@ kubectl scale deployments/postgres-deployment --replicas=<desired_amount>
 
 You can also do `kubectl delete <type> -all -n <namespace>` to delete all instances of one type of resource in a specified namespace.
 
+## Debugging tips
+### Check the logs of a pod
+```
+kubectl logs <pod_name>
+```
+You could also do `kubectl describe pod <pod_name>` which will give more technical information regarding the pod itself.
+
+### Connect to the Postgres database internally
+```
+kubectl exec -it <postgres_pod_name> -- psql -U postgres
+```
+You can then use commands like `\l` to list all available databases, `\c <database_name>` to connect to a specific database, and `\dt` to list all available tables. You will also be able to perform standard SQL queries.
+
+### Bash into a running container
+```
+kubectl exec -it <pod_name> -- /bin/bash
+```
+Once inside, utilize `ls` and `cd` to list and search through the available directories within the container.
+
 ## Clean up
 When finished, clean up the resources created in your cluster and stop Minikube (or if you no longer need Minikube, `minikube delete` to remove the Minikube cluster and all the Kubernetes nodes, pods, services, and other resources associated with it).
 ```
