@@ -23,7 +23,7 @@ See Kubernetes' [Install tools](https://kubernetes.io/docs/tasks/tools/#kubectl)
 ### With an ingress
 1. `kubectl apply -f ./dashboard/ingress.yaml`
 2. `minikube addons enable ingress` to install NGINX's ingress controller (their [GitHub page](https://github.com/kubernetes/ingress-nginx/tree/main))
-3. Run `minikube tunnel` and your ingress resources will be available at "**127.0.0.1**"
+3. Run `minikube tunnel` and your ingress resources will be available at **127.0.0.1**
 
 ## To check the status of
 - Deployments: `kubectl get deploy`
