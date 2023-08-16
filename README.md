@@ -46,7 +46,7 @@ kubectl scale deployments/shiny-app --replicas=<desired_amount>
 kubectl scale deployments/postgres-deployment --replicas=<desired_amount>
 ```
 
-## To delete a specific element
+## To delete a specific resource
 1. `kubeclt delete <type> <name>`
 
 You can also do `kubectl delete <type> -all -n <namespace>` to delete all instances of one type of resource in a specified namespace.
@@ -78,6 +78,7 @@ kubectl delete svc shiny-app-service
 kubectl delete deploy postgres-deployment
 kubectl delete svc postgres-service
 kubectl delete pvc postgres-pvc
+kubectl delete pv <pv_name>
 ```
 
 If an ingress was used, delete it as well (the following code is specifically for **NGINX**'s ingress controller):
