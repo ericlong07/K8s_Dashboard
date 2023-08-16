@@ -21,7 +21,7 @@ See Kubernetes' [Install tools](https://kubernetes.io/docs/tasks/tools/#kubectl)
 1. Run `kubectl port-forward service/shiny-app-service 3838:80` and then go to `http://localhost:3838`
 
 ### With an ingress
-1. `kubectl apply -f ingress.yaml`
+1. `kubectl apply -f ./dashboard/ingress.yaml`
 2. `minikube addons enable ingress` to install NGINX's ingress controller (their [GitHub page](https://github.com/kubernetes/ingress-nginx/tree/main))
 3. Run `minikube tunnel` and your ingress resources will be available at "**127.0.0.1**"
 
