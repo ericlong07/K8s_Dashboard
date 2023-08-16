@@ -1,4 +1,4 @@
-# K8s_Dashboard
+# K8s Dashboard and Database
 The Docker images used in each of the **deployment.yaml** are located in my DockerHub repository: [ericlong07/shiny-app](https://hub.docker.com/r/ericlong07/shiny-app/tags).
 
 ## To run the app on Minikube
