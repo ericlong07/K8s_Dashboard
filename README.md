@@ -8,10 +8,10 @@ See Kubernetes' [Install tools](https://kubernetes.io/docs/tasks/tools/#kubectl)
 1. `minikube start` to initialize a kubernetes cluster
 2. Deploy the deployment and service of both the Shiny dashboard and Postgres database:
     ```
-    kubectl apply -f /dashboard/deployment.yaml
-    kubectl apply -f /dashboard/service.yaml
-    kubectl apply -f /database/deployment.yaml
-    kubectl apply -f /database/service.yaml
+    kubectl apply -f ./dashboard/deployment.yaml
+    kubectl apply -f ./dashboard/service.yaml
+    kubectl apply -f ./database/deployment.yaml
+    kubectl apply -f ./database/service.yaml
     ```
 3. `minikube service shiny-app-service` will open a web browser to the application
 
