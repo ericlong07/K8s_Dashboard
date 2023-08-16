@@ -1,7 +1,7 @@
 # K8s Dashboard and Database
 The Docker images used in each of the **deployment.yaml** are located in my DockerHub repository: [ericlong07/shiny-app](https://hub.docker.com/r/ericlong07/shiny-app/tags).
 
-## To run the app on Minikube
+## Running the app on Minikube
 You will need to have `minikube` and `kubectl` installed.
 See Kubernetes' [Install tools](https://kubernetes.io/docs/tasks/tools/#kubectl) page for installation instructions.
 
@@ -46,7 +46,7 @@ kubectl scale deployments/shiny-app --replicas=<desired_amount>
 kubectl scale deployments/postgres-deployment --replicas=<desired_amount>
 ```
 
-## To delete a specific resource
+## Deleting a specific resource
 1. `kubeclt delete <type> <name>`
 
 You can also do `kubectl delete <type> -all -n <namespace>` to delete all instances of one type of resource in a specified namespace.
